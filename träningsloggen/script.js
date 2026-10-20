@@ -15,6 +15,20 @@ const noteInput = document.querySelector("#note");
 
 let workouts = [];
 
+try{
+    const saved= localStorage.getItem("workouts")
+    workouts = JSON.parse(saved) || [];
+}
+catch(err){
+    console.log("Could not read workouts")
+    console.log(err)
+}
+
+function save(){
+    const text = JSON.stringify(workouts);
+    localStorage.setItem("workouts", text)
+}
+
 function render(){
     workoutList.textContent="";
 
@@ -24,7 +38,7 @@ function render(){
         const minutesElement = document.createElement("p")
         const noteElement = document.createElement("p");
 
-        activityElement.textContent=`Number ${i+1} workout is: ${workouts[i].activity};`
+        activityElement.textContent=`Number ${i+1} workout is: ${workouts[i].activity}`
         minutesElement.textContent="Minutes: " + workouts[i].minutes + (workouts[i].minutes >29 ? " Long " : " Short");
         noteElement.textContent="Note: " + workouts[i].note;
 
@@ -38,6 +52,7 @@ function render(){
 }
 render();
 updateTotal();
+save();
 
 // E3
 
@@ -82,6 +97,7 @@ workoutForm.addEventListener("submit", function(event){
     workouts.push(newWorkout);
     render();
     updateTotal();
+    save();
     console.log(workouts)
 
     activityInput.value = "";
@@ -108,6 +124,8 @@ total.textContent = `Total of workout minutes is:  ${sum}  and average of the to
 
 
 }
+
+
 
 
 
